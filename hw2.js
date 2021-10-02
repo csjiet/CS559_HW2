@@ -201,6 +201,14 @@ function setup() { "use strict";
 			context.restore();	
 		}
 
+		function DrawSun(startPositionX, startPositionY, scaleX, scaleY){
+
+		}
+
+		function DrawMoon(startPositionX, startPositionY, scalex, scaleY){
+
+		}
+
 
 		// Calls all necessary drawing functions
 		if(isReleased == false){
