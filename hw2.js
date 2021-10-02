@@ -46,6 +46,12 @@ function setup() { "use strict";
 	var distanceBetweenGrass = 100; // distance between each grass
 	var distanceChanged = 15; // distance between movement of the grasses
 	var speedOfGrass = 450; // speed of movement of grasses
+
+	// Sun and moon variables
+	var sunPosX = canvas.style.width / 2;
+	var sunPosY = 20;
+	var moonPosX = canvas.style.width / 2;
+	var moonPosY = 20;
 	
 
 	// This function defines a drawings on the canvas
@@ -93,8 +99,8 @@ function setup() { "use strict";
    
 		// This function draws string of sling shot
    		function DrawSling() {
-      			context.strokeStyle= "black";
-      			context.beginPath();
+      		context.strokeStyle= "black";
+      		context.beginPath();
 			context.moveTo(80, 203); //fixed 
 			context.lineTo(stringEndPosX + ((dx-50)*2), stringEndPosY + ((dy-50)*2));
 			context.moveTo(stringEndPosX + ((dx-50)*2), stringEndPosY + ((dy-50)*2));
@@ -201,12 +207,33 @@ function setup() { "use strict";
 			context.restore();	
 		}
 
-		function DrawSun(startPositionX, startPositionY, scaleX, scaleY){
+		function DrawSunAndMoon(radOfSun, radOfMoon, scaleX, scaleY, speedOfSun){
+			
+			moonPosX = 1; // 180 opposite to the sun
+			moonPosY = 1; // 180 opposite to the sun
 
-		}
+			context.save();
+			context.scale(scaleX, scaleY);
+			// Color changing function
+			function sunColorChanger(){
+				// Make changes to color
+				context.fillStyle = "yellow";
+			}
+			function moonColorChanger(){
+				// Make changes to color
+				context.fillStyle = "blue";
+			}
+			sunColorChanger();
+			moonColorChanger();
 
-		function DrawMoon(startPositionX, startPositionY, scalex, scaleY){
+			function updateSunMoonPhysics(){
+				sunPosX ++;
+				moonPosX --;
+			}
 
+			context.arc(sunPosX, sunPosY, radOfSun, 0, 2 * Math.PI);
+			context.arc(moonPosX, moonPosY, radOfMoon, 0, 2* Math.PI);
+			context.restore();
 		}
 
 
@@ -216,8 +243,8 @@ function setup() { "use strict";
 			DrawLoadingScreen();
 		}
 		DrawGrass();
-    		DrawSling();	
-    		context.save();
+    	DrawSling();	
+    	context.save();
 		DrawAimAssist();
 		DrawSlingShot();
 		DrawPlatform();
@@ -226,6 +253,9 @@ function setup() { "use strict";
   	}
 	
 	// Animations
+	function sunAndMoonAnimator(){
+		
+	}
 
 	// This function animates the grass
 	function grassAnimator(){
