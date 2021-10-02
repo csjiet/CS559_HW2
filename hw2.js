@@ -48,10 +48,11 @@ function setup() { "use strict";
 	var speedOfGrass = 450; // speed of movement of grasses
 
 	// Sun and moon variables
-	var sunPosX = canvas.style.width / 2;
+	var sunPosX = 200
 	var sunPosY = 20;
-	var moonPosX = canvas.style.width / 2;
-	var moonPosY = 20;
+	var moonPosX = 200;
+	//var moonPosY = 295 * 2 -20;
+	var moonPosY = 70;
 	
 
 	// This function defines a drawings on the canvas
@@ -173,8 +174,10 @@ function setup() { "use strict";
 		// This function draws welcome/ instruction message on the screen
 		function DrawLoadingScreen(){
 			
+			context.save();
 			context.font = context.font = '50px serif';
 			context.fillText('Press \'Sling!\' to launch!', 10, 90);
+			context.restore();
 		}
 
 		// This function draws the grass 
@@ -207,33 +210,47 @@ function setup() { "use strict";
 			context.restore();	
 		}
 
-		function DrawSunAndMoon(radOfSun, radOfMoon, scaleX, scaleY, speedOfSun){
+		function DrawSun(radOfSun, scaleX, scaleY, speedOfSun){
 			
-			moonPosX = 1; // 180 opposite to the sun
-			moonPosY = 1; // 180 opposite to the sun
-
-			context.save();
-			context.scale(scaleX, scaleY);
+			
 			// Color changing function
 			function sunColorChanger(){
 				// Make changes to color
-				context.fillStyle = "yellow";
+				context.save();
+				context.scale(scaleX, scaleY);
+				context.arc(sunPosX, sunPosY, radOfSun, 0, 2 * Math.PI);
+				context.fillStyle = "red";
+				context.fill();
+				context.restore();
+			
+			
 			}
-			function moonColorChanger(){
-				// Make changes to color
-				context.fillStyle = "blue";
-			}
-			sunColorChanger();
-			moonColorChanger();
-
+			
 			function updateSunMoonPhysics(){
 				sunPosX ++;
 				moonPosX --;
 			}
 
-			context.arc(sunPosX, sunPosY, radOfSun, 0, 2 * Math.PI);
-			context.arc(moonPosX, moonPosY, radOfMoon, 0, 2* Math.PI);
-			context.restore();
+			
+		
+			sunColorChanger();
+			
+			
+		}
+
+		function DrawMoon(radOfMoon, scaleX, scaleY, speedOfSun){
+			function moonColorChanger(){
+				// Make changes to color
+				context.save();
+				context.scale(scaleX, scaleY);
+				context.arc(moonPosX, moonPosY, radOfMoon, 0, 2* Math.PI);
+				context.fillStyle = "yellow";
+				context.fill();
+				context.restore();
+				
+			}
+
+			moonColorChanger();
 		}
 
 
@@ -242,12 +259,16 @@ function setup() { "use strict";
 			
 			DrawLoadingScreen();
 		}
+
+		context.save();
 		DrawGrass();
     	DrawSling();	
-    	context.save();
+    	
 		DrawAimAssist();
 		DrawSlingShot();
 		DrawPlatform();
+		DrawSun(50, 1, 1, 5);
+		DrawMoon(50, 1, 1, 5);
 		context.restore();
     
   	}
@@ -364,7 +385,7 @@ function setup() { "use strict";
   	sliderY.addEventListener("input",draw); // Slider that reflects the Y position of sling string
 	slingButton.addEventListener("click", slingRelease); // Button that fires the sling		
 	grassAnimatorTracker = setInterval(grassAnimator, speedOfGrass); // Starts grass animator 
-	
+
 	// Updates drawn frame
   	draw();
 }
