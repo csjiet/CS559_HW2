@@ -49,12 +49,14 @@ function setup() { "use strict";
 
 	// Sun and moon variables
 	var sunMoonAnimatorTracker = null;
-	var sunPosX = 200
+	var sunPosX = canvas.width/2; //200
 	var sunPosY = 20;
-	var moonPosX = 200;
-	var moonPosY = 224 * 2 - 20;
+	var moonPosX = canvas.width/2;
+	//var moonPosY = (295 - 71) * 2 - sunPosY;
+	var moonPosY = (canvas.height + 70 * 2) - 20;
 	var timeOfSunAndMoon = 0;
 	var speedOfSunMoonRotation = 100;
+	var isDay = true;
 	//var moonPosY = 70;
 	
 
@@ -216,36 +218,33 @@ function setup() { "use strict";
 		function dayNightChanger(){
 			function DrawSun(radOfSun, scaleX, scaleY, speedOfSun){
 				
-				
-				// Color changing function
-				function sunColorChanger(){
 
-					// Make changes to background color
-					context.save();
-					context.translate(-50,0);
-					context.beginPath();
-					context.fillStyle = "white";
-					context.fillRect(0, 0, canvas.width, canvas.height);
-					context.fill();
-					context.restore();
-
-
-					// Make changes to color
-					context.save();
-					context.beginPath();
-					context.scale(scaleX, scaleY);
-					context.arc(sunPosX, sunPosY, radOfSun, 0, 2 * Math.PI);
-					context.fillStyle = "yellow";
-					context.fill();
-					context.restore();
+				// Make changes to background color
+				context.save();
+				context.translate(-50,0);
+				context.beginPath();
 				
+				context.fillStyle = "rgb(250, 251, 189)";
 				
-				}
-				sunColorChanger();
+				context.fillRect(0, 0, canvas.width, canvas.height);
+				context.fill();
+				context.restore();
+
+				// Make changes to color
+				context.save();
+				context.beginPath();
+				context.scale(scaleX, scaleY);
+				context.arc(sunPosX, sunPosY, radOfSun, 0, 2 * Math.PI);
+				
+				context.fillStyle = "rgb(253, 224, 80)";
+				
+				context.fill();
+				context.restore();
 				
 				
 			}
 
+			
 			function DrawMoon(radOfMoon, scaleX, scaleY, speedOfSun){
 				function moonColorChanger(){
 					
@@ -253,7 +252,7 @@ function setup() { "use strict";
 					context.save();
 					context.translate(-50,0);
 					context.beginPath();
-					context.fillStyle = "blue";
+					context.fillStyle = "rgb(22, 73, 138)";
 					context.fillRect(0, 0, canvas.width, canvas.height);
 					context.fill();
 					context.restore();
@@ -274,11 +273,14 @@ function setup() { "use strict";
 				moonColorChanger();
 			}
 			
-			if(sunPosY <= 280 - 10){
+			
+			
+			if(sunPosY <= canvas.height){
 				DrawSun(50, 1, 1, 5);
 			}else{
 				DrawMoon(50, 1, 1, 5);
 			}
+
 		}
 
 		
@@ -308,16 +310,12 @@ function setup() { "use strict";
 		// x = r*cos(t)
 		// y = r*sin(t)
 		
-		var r = 295 - 20;
 		timeOfSunAndMoon += 0.05;
 		sunPosX = sunPosX + Math.cos(timeOfSunAndMoon) * 10;
 		sunPosY = sunPosY + Math.sin(timeOfSunAndMoon) * 10;
 
-		moonPosX = moonPosX + Math.cos(timeOfSunAndMoon) * -10;
-		moonPosY = moonPosY + Math.sin(timeOfSunAndMoon) * -10;
-		
-
-		// MOON AND SUN ARE NOT EXACT OPPOSITES! UNDERSTAND THE CIRCLE FORMULA AND IMPLEMENT IT
+		moonPosX = moonPosX + Math.cos(timeOfSunAndMoon) * (-10);
+		moonPosY = moonPosY + Math.sin(timeOfSunAndMoon) * (-10);
 
 
 	}
