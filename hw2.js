@@ -217,22 +217,15 @@ function setup() { "use strict";
 			function sunColorChanger(){
 				// Make changes to color
 				context.save();
+				context.beginPath();
 				context.scale(scaleX, scaleY);
 				context.arc(sunPosX, sunPosY, radOfSun, 0, 2 * Math.PI);
-				context.fillStyle = "red";
+				context.fillStyle = "yellow";
 				context.fill();
 				context.restore();
 			
 			
 			}
-			
-			function updateSunMoonPhysics(){
-				sunPosX ++;
-				moonPosX --;
-			}
-
-			
-		
 			sunColorChanger();
 			
 			
@@ -242,9 +235,10 @@ function setup() { "use strict";
 			function moonColorChanger(){
 				// Make changes to color
 				context.save();
+				context.beginPath();
 				context.scale(scaleX, scaleY);
 				context.arc(moonPosX, moonPosY, radOfMoon, 0, 2* Math.PI);
-				context.fillStyle = "yellow";
+				context.fillStyle = "grey";
 				context.fill();
 				context.restore();
 				
