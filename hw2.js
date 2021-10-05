@@ -53,7 +53,7 @@ function setup() { "use strict";
 	var sunPosY = 20;
 	var moonPosX = canvas.width/2;
 	//var moonPosY = (295 - 71) * 2 - sunPosY;
-	var moonPosY = (canvas.height + 70 * 2) - 20;
+	var moonPosY = ((canvas.height - 70 ) * 2) - 20;
 	var timeOfSunAndMoon = 0;
 	var speedOfSunMoonRotation = 100;
 	var isDay = true;
@@ -317,6 +317,10 @@ function setup() { "use strict";
 		moonPosX = moonPosX + Math.cos(timeOfSunAndMoon) * (-10);
 		moonPosY = moonPosY + Math.sin(timeOfSunAndMoon) * (-10);
 
+		if(rockPosX >=600 || rockPosX <= -50 || rockPosY >= 279){
+
+			clearInterval(sunMoonAnimatorTracker);
+		}
 
 	}
 
