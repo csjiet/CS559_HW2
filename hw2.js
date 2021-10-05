@@ -48,11 +48,14 @@ function setup() { "use strict";
 	var speedOfGrass = 450; // speed of movement of grasses
 
 	// Sun and moon variables
+	var sunMoonAnimatorTracker = null;
 	var sunPosX = 200
 	var sunPosY = 20;
 	var moonPosX = 200;
-	//var moonPosY = 295 * 2 -20;
-	var moonPosY = 70;
+	var moonPosY = 224 * 2 - 20;
+	var timeOfSunAndMoon = 0;
+	var speedOfSunMoonRotation = 100;
+	//var moonPosY = 70;
 	
 
 	// This function defines a drawings on the canvas
@@ -210,43 +213,78 @@ function setup() { "use strict";
 			context.restore();	
 		}
 
-		function DrawSun(radOfSun, scaleX, scaleY, speedOfSun){
-			
-			
-			// Color changing function
-			function sunColorChanger(){
-				// Make changes to color
-				context.save();
-				context.beginPath();
-				context.scale(scaleX, scaleY);
-				context.arc(sunPosX, sunPosY, radOfSun, 0, 2 * Math.PI);
-				context.fillStyle = "yellow";
-				context.fill();
-				context.restore();
-			
-			
-			}
-			sunColorChanger();
-			
-			
-		}
+		function dayNightChanger(){
+			function DrawSun(radOfSun, scaleX, scaleY, speedOfSun){
+				
+				
+				// Color changing function
+				function sunColorChanger(){
 
-		function DrawMoon(radOfMoon, scaleX, scaleY, speedOfSun){
-			function moonColorChanger(){
-				// Make changes to color
-				context.save();
-				context.beginPath();
-				context.scale(scaleX, scaleY);
-				context.arc(moonPosX, moonPosY, radOfMoon, 0, 2* Math.PI);
-				context.fillStyle = "grey";
-				context.fill();
-				context.restore();
+					// Make changes to background color
+					context.save();
+					context.translate(-50,0);
+					context.beginPath();
+					context.fillStyle = "white";
+					context.fillRect(0, 0, canvas.width, canvas.height);
+					context.fill();
+					context.restore();
+
+
+					// Make changes to color
+					context.save();
+					context.beginPath();
+					context.scale(scaleX, scaleY);
+					context.arc(sunPosX, sunPosY, radOfSun, 0, 2 * Math.PI);
+					context.fillStyle = "yellow";
+					context.fill();
+					context.restore();
+				
+				
+				}
+				sunColorChanger();
+				
 				
 			}
 
-			moonColorChanger();
+			function DrawMoon(radOfMoon, scaleX, scaleY, speedOfSun){
+				function moonColorChanger(){
+					
+					// Make changes to background color
+					context.save();
+					context.translate(-50,0);
+					context.beginPath();
+					context.fillStyle = "blue";
+					context.fillRect(0, 0, canvas.width, canvas.height);
+					context.fill();
+					context.restore();
+					
+					
+
+					// Make changes to moon color
+					context.save();
+					context.beginPath();
+					context.scale(scaleX, scaleY);
+					context.arc(moonPosX, moonPosY, radOfMoon, 0, 2* Math.PI);
+					context.fillStyle = "grey";
+					context.fill();
+					context.restore();
+					
+				}
+
+				moonColorChanger();
+			}
+			
+			if(sunPosY <= 280 - 10){
+				DrawSun(50, 1, 1, 5);
+			}else{
+				DrawMoon(50, 1, 1, 5);
+			}
 		}
 
+		
+
+		context.save();
+		dayNightChanger();
 
 		// Calls all necessary drawing functions
 		if(isReleased == false){
@@ -254,22 +292,34 @@ function setup() { "use strict";
 			DrawLoadingScreen();
 		}
 
-		context.save();
 		DrawGrass();
     	DrawSling();	
     	
 		DrawAimAssist();
 		DrawSlingShot();
 		DrawPlatform();
-		DrawSun(50, 1, 1, 5);
-		DrawMoon(50, 1, 1, 5);
 		context.restore();
     
   	}
 	
 	// Animations
 	function sunAndMoonAnimator(){
+		// x^2 + y^2 = r^2
+		// x = r*cos(t)
+		// y = r*sin(t)
 		
+		var r = 295 - 20;
+		timeOfSunAndMoon += 0.05;
+		sunPosX = sunPosX + Math.cos(timeOfSunAndMoon) * 10;
+		sunPosY = sunPosY + Math.sin(timeOfSunAndMoon) * 10;
+
+		moonPosX = moonPosX + Math.cos(timeOfSunAndMoon) * -10;
+		moonPosY = moonPosY + Math.sin(timeOfSunAndMoon) * -10;
+		
+
+		// MOON AND SUN ARE NOT EXACT OPPOSITES! UNDERSTAND THE CIRCLE FORMULA AND IMPLEMENT IT
+
+
 	}
 
 	// This function animates the grass
@@ -379,6 +429,7 @@ function setup() { "use strict";
   	sliderY.addEventListener("input",draw); // Slider that reflects the Y position of sling string
 	slingButton.addEventListener("click", slingRelease); // Button that fires the sling		
 	grassAnimatorTracker = setInterval(grassAnimator, speedOfGrass); // Starts grass animator 
+	sunMoonAnimatorTracker = setInterval(sunAndMoonAnimator, speedOfSunMoonRotation);
 
 	// Updates drawn frame
   	draw();
