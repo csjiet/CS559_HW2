@@ -53,11 +53,17 @@ function setup() { "use strict";
 	var sunPosY = 20;
 	var moonPosX = canvas.width/2;
 	//var moonPosY = (295 - 71) * 2 - sunPosY;
-	var moonPosY = ((canvas.height - 70 ) * 2) - 20;
+	var moonPosY = ((canvas.height - 70) * 2) - 20;
 	var timeOfSunAndMoon = 0;
 	var speedOfSunMoonRotation = 100;
 	var isDay = true;
-	//var moonPosY = 70;
+	
+	var targetAnimatorTracker = null;
+	var targetPosX = canvas.width - 200;
+	var targetPosY = canvas.height/2;
+	var timeOfTargetPos = 0;
+	var speedOfTarget = 10;
+	
 	
 
 	// This function defines a drawings on the canvas
@@ -283,14 +289,97 @@ function setup() { "use strict";
 
 		}
 
-		
+		function DrawTarget(){
+			
+			context.save();
 
+			// Draw ears
+			context.beginPath();
+			context.ellipse(targetPosX, targetPosY - 20, 6, 8, 9.5, (2 * Math.PI), 2 * Math.PI/2);
+			context.fillStyle = "green"
+			context.fill();
+			context.stroke();
+			context.beginPath();
+			context.ellipse(targetPosX + 18, targetPosY - 14, 6, 8, 10.3, (2 * Math.PI), 2 * Math.PI/2);
+			context.fillStyle = "green"
+			context.fill();
+			context.stroke();
+
+			// Draw head
+			context.beginPath();
+			context.arc(targetPosX, targetPosY, 23, 0, 2 * Math.PI);
+			context.fillStyle = "rgb(102, 255, 0)"
+			context.fill();
+
+			var offsetBetweenEyes = 3;
+			// Draw left brow
+			context.moveTo(targetPosX - 10 - offsetBetweenEyes, targetPosY - 10);
+			context.lineTo(targetPosX - 5 - offsetBetweenEyes, targetPosY - 13);
+
+			// Draw right brow
+			context.moveTo(targetPosX + 10 + offsetBetweenEyes, targetPosY - 10);
+			context.lineTo(targetPosX + 5 + offsetBetweenEyes, targetPosY - 13);
+
+			context.strokeStyle = "green";
+			context.stroke();
+
+			// Draw left eye
+			context.beginPath();
+			
+			context.arc(targetPosX - 9 - offsetBetweenEyes, targetPosY - 5, 4, 0, 2 * Math.PI);
+			context.stroke();
+			context.beginPath();
+			context.arc(targetPosX - 10 - offsetBetweenEyes, targetPosY - 5, 2, 0, 2 * Math.PI);
+			context.fillStyle = "black";
+			context.fill();
+
+			// Draw right eye
+			context.beginPath();
+			context.arc(targetPosX + 9 + offsetBetweenEyes, targetPosY - 5, 4, 0, 2 * Math.PI);
+			context.stroke();
+			context.beginPath();
+			context.arc(targetPosX + 10 + offsetBetweenEyes, targetPosY - 5, 2, 0, 2 * Math.PI);
+			context.fillStyle = "black";
+			context.fill();
+
+			// Draw nose
+			context.beginPath();
+			context.ellipse(targetPosX, targetPosY + 5, 14, 8, 0, 0, 2 * Math.PI);
+			context.stroke();
+
+			// Left nostril
+			context.beginPath();
+			context.ellipse(targetPosX - 5, targetPosY + 5, 6, 3, 5, 0, 2 * Math.PI);
+			context.fillStyle = "black";
+			context.fill();
+
+			// Right nostril
+			context.beginPath();
+			context.ellipse(targetPosX + 5, targetPosY + 5, 5, 3, -5, 0, 2 * Math.PI);
+			context.fillStyle = "black";
+			context.fill();
+
+			// Draw mouth
+			context.beginPath();
+			context.ellipse(targetPosX, targetPosY + 13, 6, 3, 0, (2 * Math.PI), 2 * Math.PI / 2);
+			context.strokeStyle = "black";
+			context.stroke();
+
+			
+
+			
+
+			context.restore();
+
+			
+		}
+
+		
+		// Calls all necessary drawing functions
 		context.save();
 		dayNightChanger();
 
-		// Calls all necessary drawing functions
 		if(isReleased == false){
-			
 			DrawLoadingScreen();
 		}
 
@@ -300,11 +389,20 @@ function setup() { "use strict";
 		DrawAimAssist();
 		DrawSlingShot();
 		DrawPlatform();
+		DrawTarget();
 		context.restore();
     
   	}
 	
 	// Animations
+	
+	function targetAnimator(){
+
+		timeOfTargetPos += 0.05;
+		targetPosY = (targetPosY + Math.sin(timeOfTargetPos)) ;
+	}
+
+
 	function sunAndMoonAnimator(){
 		// x^2 + y^2 = r^2
 		// x = r*cos(t)
@@ -432,6 +530,7 @@ function setup() { "use strict";
 	slingButton.addEventListener("click", slingRelease); // Button that fires the sling		
 	grassAnimatorTracker = setInterval(grassAnimator, speedOfGrass); // Starts grass animator 
 	sunMoonAnimatorTracker = setInterval(sunAndMoonAnimator, speedOfSunMoonRotation);
+	targetAnimatorTracker = setInterval(targetAnimator, speedOfTarget);
 
 	// Updates drawn frame
   	draw();
