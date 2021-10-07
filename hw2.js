@@ -83,6 +83,7 @@ function setup() { "use strict";
 	var rightWingFromInnerJointPosY = targetPosY;
 	var rightWingToInnerJointPosX = targetPosX - 10; 
 	var rightWingToInnerJointPosY = targetPosY;
+	var rightWingToInnerJointRotation = 0;
 
 	var rightWingToOuterJointPosX = targetPosX - 10; 
 	var rightWingToOuterJointPosY = targetPosY;
@@ -318,25 +319,34 @@ function setup() { "use strict";
 			context.beginPath();
 			context.translate(targetPosX, targetPosY);
 			context.rotate(leftWingToInnerJointRotation * Math.PI / 180);
+			context.fillStyle = "black";
 			context.fillRect(0, 0, 50, 2);
-			console.log(targetPosY);
+			context.fill();
+			context.restore();
+
+			context.save();
+			context.beginPath();
+			context.translate(targetPosX, targetPosY);
+			context.rotate(rightWingToInnerJointRotation * Math.PI / 180);
+			context.fillStyle = "black";
+			context.fillRect(0, 0, 50, 2);
+			context.fill();
+			context.restore();
 			// SET CONDITION FOR FLAPPING MOTION!!!!
 
-			if(targetPosY - 150 < 0){
-				leftWingToInnerJointRotation += 5;
-			}else{
-				leftWingToInnerJointRotation -= 5;
-			}
+			// if(targetPosY - 150 < 0){
+			// 	leftWingToInnerJointRotation += 5;
+			// }else{
+			// 	leftWingToInnerJointRotation -= 5;
+			// }
+			leftWingToInnerJointRotation += ((targetPosY - 150));
+			rightWingToInnerJointRotation -= ((targetPosY - 150));
 			
 			
 			
-			context.fillStyle = "brown";
-			context.fill();
 
 			// right wing inner joint
 
-
-			context.restore();
 
 
 		}
@@ -476,6 +486,7 @@ function setup() { "use strict";
 
 		timeOfTargetPos += 0.05;
 		targetPosY = (targetPosY + Math.sin(timeOfTargetPos));
+		draw();
 
 		if(rockPosX >=600 || rockPosX <= -50 || rockPosY >= 279){
 
@@ -549,7 +560,7 @@ function setup() { "use strict";
 		// y = v * t * sin(theta) - (1/2)*g* (t^2)	
 		// * 1.5 increases horizontal distance travelled
 		rockPosX = ((dist*Math.sin(angle))*time)*2 + rockPosX; // Stores x position of rock at each frame
-		rockPosY = ((((dist*Math.cos(angle))*time) - ((1/2)*gravity*(time*time))) + rockPosY); // Stores the y position of rock at each frame
+		rockPosY = ((((dist*Math.cos(angle))*time) * 1.3 - ((1/2)*gravity*(time*time))) + rockPosY); // Stores the y position of rock at each frame
 
 		// Draws the changes made to the position of the rock
 		draw();
