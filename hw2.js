@@ -69,6 +69,8 @@ function setup() { "use strict";
 	var speedOfTarget = 10;
 
 	// Left wing stroke variables
+	var innerAndOuterWingFlex = 15;
+
 	var leftWingFromInnerJointPosX = targetPosX;
 	var leftWingFromInnerJointPosY = targetPosY;
 	var leftWingToInnerJointPosX = targetPosX; 
@@ -77,7 +79,7 @@ function setup() { "use strict";
 
 	var leftWingToOuterJointPosX = targetPosX - 10; 
 	var leftWingToOuterJointPosY = targetPosY;
-	var leftWingToOuterJointRotation = leftWingToInnerJointRotation + 10;
+	var leftWingToOuterJointRotation = leftWingToInnerJointRotation - innerAndOuterWingFlex;
 	
 
 	// Right wing stoke variables
@@ -89,6 +91,7 @@ function setup() { "use strict";
 
 	var rightWingToOuterJointPosX = targetPosX - 10; 
 	var rightWingToOuterJointPosY = targetPosY;
+	var rightWingToOuterJointRotation = rightWingToInnerJointRotation + innerAndOuterWingFlex;
 
 
 	// This function defines a drawings on the canvas
@@ -316,6 +319,9 @@ function setup() { "use strict";
 
 		function DrawWings(){
 
+			var innerJointSpan = 40;
+			var outerJointSpan = 40;
+
 			// left wing inner joint
 			context.save();
 			context.beginPath();
@@ -323,7 +329,18 @@ function setup() { "use strict";
 			context.rotate(leftWingToInnerJointRotation * Math.PI / 180);
 			context.fillStyle = "rgb(138, 154, 91)";
 			context.stroke();
-			context.fillRect(0, 0, 55, 2);
+			context.fillRect(0, 0, innerJointSpan, 2);
+			context.fill();
+			context.restore();
+
+			context.save();
+			context.beginPath();
+			context.translate(targetPosX, targetPosY);
+			context.translate((innerJointSpan* Math.cos(leftWingToInnerJointRotation * Math.PI / 180)), (innerJointSpan* Math.sin(leftWingToInnerJointRotation * Math.PI / 180)));
+			context.rotate(leftWingToOuterJointRotation * Math.PI / 180);
+			context.fillStyle = "rgb(138, 154, 91)";
+			context.stroke();
+			context.fillRect(0, 0, outerJointSpan, 2);
 			context.fill();
 			context.restore();
 
@@ -335,31 +352,43 @@ function setup() { "use strict";
 			context.rotate(rightWingToInnerJointRotation * Math.PI / 180);
 			context.fillStyle = "rgb(138, 154, 91)";
 			context.stroke();
-			context.fillRect(0, 0, 55, 2);
+			context.fillRect(0, 0, innerJointSpan, 2);
+			context.fill();
+			context.restore();
+
+			context.save();
+			context.beginPath();
+			context.translate(targetPosX, targetPosY);
+			context.translate((innerJointSpan* Math.cos(rightWingToInnerJointRotation * Math.PI / 180)), (innerJointSpan* Math.sin(rightWingToInnerJointRotation * Math.PI / 180)));
+			context.rotate(rightWingToOuterJointRotation * Math.PI / 180);
+			context.fillStyle = "rgb(138, 154, 91)";
+			context.stroke();
+			context.fillRect(0, 0, outerJointSpan, 2);
 			context.fill();
 			context.restore();
 			// SET CONDITION FOR FLAPPING MOTION!!!!
 
-			// if(targetPosY - 150 < 0){
-			// 	leftWingToInnerJointRotation += 5;
-			// }else{
-			// 	leftWingToInnerJointRotation -= 5;
-			// }
 
 			if(leftWingToInnerJointRotation >= 180){
 				leftWingToInnerJointRotation = 180;
 			}
-
-			// if(leftWingToOuterJointRotation >= 180 + 10){
-			// 	leftWingToInnerJointRotation = 180 + 10;
-			// }
-
 			if(rightWingToInnerJointRotation <= 0){
 				rightWingToInnerJointRotation = 0;
 			}
+
+			if(leftWingToOuterJointRotation >= 180 - innerAndOuterWingFlex){
+				leftWingToOuterJointRotation = 180 - innerAndOuterWingFlex;
+			}
+			if(rightWingToOuterJointRotation <= 0 + innerAndOuterWingFlex){
+				rightWingToOuterJointRotation = 0 + innerAndOuterWingFlex;
+			}
+
+
 			leftWingToInnerJointRotation += ((targetPosY - 150));
-			//leftWingToOuterJointRotation += ((targetPosY - 150));
 			rightWingToInnerJointRotation -= ((targetPosY - 150));
+			
+			leftWingToOuterJointRotation += ((targetPosY - 150));
+			rightWingToOuterJointRotation -= ((targetPosY - 150));
 			
 			
 			
