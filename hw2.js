@@ -4,6 +4,8 @@ function setup() { "use strict";
 // Variables
 	var sliderLength = 100; // length of slider x and y
 	var canvas = document.getElementById('myCanvas');
+	var updateAnimatorTracker = null;
+	var speedOfRender = 200;
   	
 	// Slider variables
 	var sliderX = document.getElementById('sliderX');
@@ -374,9 +376,29 @@ function setup() { "use strict";
 			
 		}
 
+		function DrawRockAndTargetCollisionDetectionText(){
+
+			if((targetPosX - 30 <= rockPosX && targetPosX + 30 >= rockPosX) && (targetPosY - 30 <= rockPosY && targetPosY + 30 >= rockPosY)){
+				clearInterval(targetAnimatorTracker);
+				clearInterval(updateAnimatorTracker);
+				clearInterval(rockAnimatorTracker);
+				context.save();
+				context.translate(-50, 0);
+				context.fillStyle = ""
+				context.font = '70px serif';
+				context.fillText('LEVEL CLEARED! \nScore: 10/10', 10, 90);
+				context.restore();
+
+				
+				console.log(1);
+			}
+
+		}
+
 		
 		// Calls all necessary drawing functions
 		context.save();
+		
 		dayNightChanger();
 
 		if(isReleased == false){
@@ -390,6 +412,8 @@ function setup() { "use strict";
 		DrawSlingShot();
 		DrawPlatform();
 		DrawTarget();
+		DrawRockAndTargetCollisionDetectionText();
+		
 		context.restore();
     
   	}
@@ -399,7 +423,12 @@ function setup() { "use strict";
 	function targetAnimator(){
 
 		timeOfTargetPos += 0.05;
-		targetPosY = (targetPosY + Math.sin(timeOfTargetPos)) ;
+		targetPosY = (targetPosY + Math.sin(timeOfTargetPos));
+
+		if(rockPosX >=600 || rockPosX <= -50 || rockPosY >= 279){
+
+			clearInterval(updateAnimatorTracker);
+		}
 	}
 
 
@@ -415,10 +444,10 @@ function setup() { "use strict";
 		moonPosX = moonPosX + Math.cos(timeOfSunAndMoon) * (-10);
 		moonPosY = moonPosY + Math.sin(timeOfSunAndMoon) * (-10);
 
-		if(rockPosX >=600 || rockPosX <= -50 || rockPosY >= 279){
+		// if(rockPosX >=600 || rockPosX <= -50 || rockPosY >= 279){
 
-			clearInterval(sunMoonAnimatorTracker);
-		}
+		// 	clearInterval(sunMoonAnimatorTracker);
+		// }
 
 	}
 
@@ -433,10 +462,10 @@ function setup() { "use strict";
 		startingGrassX = startingGrassX + distanceChanged;
 		
 		// Stops grass animation when game ends/ rock reaches the ground & end of canvas
-		if(rockPosX >=600 || rockPosX <= -50 || rockPosY >= 279){
+		// if(rockPosX >=600 || rockPosX <= -50 || rockPosY >= 279){
 
-			clearInterval(grassAnimatorTracker);
-		}
+		// 	clearInterval(grassAnimatorTracker);
+		// }
 	}
 
 	// This function calculates distance
@@ -466,7 +495,8 @@ function setup() { "use strict";
 		// Updates displacement of rock using equations
 		// x = v * t * cos(theta)
 		// y = v * t * sin(theta) - (1/2)*g* (t^2)	
-		rockPosX = ((dist*Math.sin(angle))*time) + rockPosX; // Stores x position of rock at each frame
+		// * 1.5 increases horizontal distance travelled
+		rockPosX = ((dist*Math.sin(angle))*time)*2 + rockPosX; // Stores x position of rock at each frame
 		rockPosY = ((((dist*Math.cos(angle))*time) - ((1/2)*gravity*(time*time))) + rockPosY); // Stores the y position of rock at each frame
 
 		// Draws the changes made to the position of the rock
@@ -523,17 +553,37 @@ function setup() { "use strict";
 			
 
 	}
+
+	
+
+	// Function that calls all animators
+	// Lines that are commented means it has 
+	// its own rendering speed, which is different from what is defined here
+	function callAllAnimators(){
+		grassAnimator();
+		sunAndMoonAnimator();
+		//targetAnimator();
+
+		draw();
+		if(rockPosX >=600 || rockPosX <= -50 || rockPosY >= 279){
+
+			clearInterval(updateAnimatorTracker);
+		}
+
+		
+	}
   	
  	// Event listeners
 	sliderX.addEventListener("input",draw); // Slider that reflects the X position of sling string
   	sliderY.addEventListener("input",draw); // Slider that reflects the Y position of sling string
 	slingButton.addEventListener("click", slingRelease); // Button that fires the sling		
-	grassAnimatorTracker = setInterval(grassAnimator, speedOfGrass); // Starts grass animator 
-	sunMoonAnimatorTracker = setInterval(sunAndMoonAnimator, speedOfSunMoonRotation);
+	//grassAnimatorTracker = setInterval(grassAnimator, speedOfGrass); // Starts grass animator 
+	//sunMoonAnimatorTracker = setInterval(sunAndMoonAnimator, speedOfSunMoonRotation);
 	targetAnimatorTracker = setInterval(targetAnimator, speedOfTarget);
 
 	// Updates drawn frame
-  	draw();
+	updateAnimatorTracker = setInterval(callAllAnimators, speedOfRender);
+  	//draw();
 }
 
 
