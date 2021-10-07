@@ -659,10 +659,13 @@ function setup() { "use strict";
 		
 	}
   	
- 	// Event listeners
+ 	
+	// This is a void function
 	function empty(){
 
 	}
+
+	// Event listeners
 	sliderX.addEventListener("input", empty); // Slider that reflects the X position of sling string
   	sliderY.addEventListener("input", empty); // Slider that reflects the Y position of sling string
 	slingButton.addEventListener("click", slingRelease); // Button that fires the sling		
