@@ -318,8 +318,14 @@ function setup() { "use strict";
 			context.translate(targetPosX, targetPosY);
 			context.rotate(leftWingToInnerJointRotation * Math.PI / 180);
 			context.fillRect(0, 0, 50, 2);
-			//console.log(canvas.height/2);
+			console.log(targetPosY);
 			// SET CONDITION FOR FLAPPING MOTION!!!!
+
+			if(targetPosY - 150 < 0){
+				leftWingToInnerJointRotation += 5;
+			}else{
+				leftWingToInnerJointRotation -= 5;
+			}
 			
 			
 			
@@ -619,8 +625,11 @@ function setup() { "use strict";
 	}
   	
  	// Event listeners
-	sliderX.addEventListener("input",draw); // Slider that reflects the X position of sling string
-  	sliderY.addEventListener("input",draw); // Slider that reflects the Y position of sling string
+	function empty(){
+
+	}
+	sliderX.addEventListener("input", empty); // Slider that reflects the X position of sling string
+  	sliderY.addEventListener("input", empty); // Slider that reflects the Y position of sling string
 	slingButton.addEventListener("click", slingRelease); // Button that fires the sling		
 	//grassAnimatorTracker = setInterval(grassAnimator, speedOfGrass); // Starts grass animator 
 	//sunMoonAnimatorTracker = setInterval(sunAndMoonAnimator, speedOfSunMoonRotation);
