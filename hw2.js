@@ -5,7 +5,7 @@ function setup() { "use strict";
 	var sliderLength = 100; // length of slider x and y
 	var canvas = document.getElementById('myCanvas');
 	var updateAnimatorTracker = null;
-	var speedOfRender = 150;
+	var speedOfRender = 125;
   	
 	// Slider variables
 	var sliderX = document.getElementById('sliderX');
@@ -60,8 +60,10 @@ function setup() { "use strict";
 	var speedOfSunMoonRotation = 100;
 	var isDay = true;
 	
+
+	// Target variables
 	var targetAnimatorTracker = null;
-	var targetPosX = canvas.width - 200;
+	var targetPosX = canvas.width - 150;
 	var targetPosY = canvas.height/2;
 	var timeOfTargetPos = 0;
 	var speedOfTarget = 10;
@@ -72,10 +74,10 @@ function setup() { "use strict";
 	var leftWingToInnerJointPosX = targetPosX; 
 	var leftWingToInnerJointPosY = targetPosY;
 	var leftWingToInnerJointRotation = 180;
-	var switchWingDirection = false;
 
 	var leftWingToOuterJointPosX = targetPosX - 10; 
 	var leftWingToOuterJointPosY = targetPosY;
+	var leftWingToOuterJointRotation = leftWingToInnerJointRotation + 10;
 	
 
 	// Right wing stoke variables
@@ -319,17 +321,21 @@ function setup() { "use strict";
 			context.beginPath();
 			context.translate(targetPosX, targetPosY);
 			context.rotate(leftWingToInnerJointRotation * Math.PI / 180);
-			context.fillStyle = "black";
-			context.fillRect(0, 0, 50, 2);
+			context.fillStyle = "rgb(138, 154, 91)";
+			context.stroke();
+			context.fillRect(0, 0, 55, 2);
 			context.fill();
 			context.restore();
 
+
+			// Right wing inner joint
 			context.save();
 			context.beginPath();
 			context.translate(targetPosX, targetPosY);
 			context.rotate(rightWingToInnerJointRotation * Math.PI / 180);
-			context.fillStyle = "black";
-			context.fillRect(0, 0, 50, 2);
+			context.fillStyle = "rgb(138, 154, 91)";
+			context.stroke();
+			context.fillRect(0, 0, 55, 2);
 			context.fill();
 			context.restore();
 			// SET CONDITION FOR FLAPPING MOTION!!!!
@@ -339,7 +345,20 @@ function setup() { "use strict";
 			// }else{
 			// 	leftWingToInnerJointRotation -= 5;
 			// }
+
+			if(leftWingToInnerJointRotation >= 180){
+				leftWingToInnerJointRotation = 180;
+			}
+
+			// if(leftWingToOuterJointRotation >= 180 + 10){
+			// 	leftWingToInnerJointRotation = 180 + 10;
+			// }
+
+			if(rightWingToInnerJointRotation <= 0){
+				rightWingToInnerJointRotation = 0;
+			}
 			leftWingToInnerJointRotation += ((targetPosY - 150));
+			//leftWingToOuterJointRotation += ((targetPosY - 150));
 			rightWingToInnerJointRotation -= ((targetPosY - 150));
 			
 			
@@ -618,7 +637,6 @@ function setup() { "use strict";
 	}
 
 	
-
 	// Function that calls all animators
 	// Lines that are commented means it has 
 	// its own rendering speed, which is different from what is defined here
