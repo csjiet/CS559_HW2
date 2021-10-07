@@ -87,6 +87,7 @@ function setup() { "use strict";
 	var rightWingToOuterJointPosX = targetPosX - 10; 
 	var rightWingToOuterJointPosY = targetPosY;
 
+
 	// This function defines a drawings on the canvas
   	function draw() {
     		var context = canvas.getContext('2d');
@@ -141,8 +142,8 @@ function setup() { "use strict";
 			displacementOfStringY = ((dy-50)*2);
 			context.lineTo(75, 218); // fixed
       
-      			context.stroke();
-     		}
+      		context.stroke();
+     	}
 		
 		// This function draws ground where sling shot stands
 		function DrawPlatform(){
