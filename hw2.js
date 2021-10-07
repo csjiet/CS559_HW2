@@ -5,7 +5,7 @@ function setup() { "use strict";
 	var sliderLength = 100; // length of slider x and y
 	var canvas = document.getElementById('myCanvas');
 	var updateAnimatorTracker = null;
-	var speedOfRender = 200;
+	var speedOfRender = 150;
   	
 	// Slider variables
 	var sliderX = document.getElementById('sliderX');
@@ -65,8 +65,27 @@ function setup() { "use strict";
 	var targetPosY = canvas.height/2;
 	var timeOfTargetPos = 0;
 	var speedOfTarget = 10;
+
+	// Left wing stroke variables
+	var leftWingFromInnerJointPosX = targetPosX;
+	var leftWingFromInnerJointPosY = targetPosY;
+	var leftWingToInnerJointPosX = targetPosX; 
+	var leftWingToInnerJointPosY = targetPosY;
+	var leftWingToInnerJointRotation = 180;
+	var switchWingDirection = false;
+
+	var leftWingToOuterJointPosX = targetPosX - 10; 
+	var leftWingToOuterJointPosY = targetPosY;
 	
-	
+
+	// Right wing stoke variables
+	var rightWingFromInnerJointPosX = targetPosX;
+	var rightWingFromInnerJointPosY = targetPosY;
+	var rightWingToInnerJointPosX = targetPosX - 10; 
+	var rightWingToInnerJointPosY = targetPosY;
+
+	var rightWingToOuterJointPosX = targetPosX - 10; 
+	var rightWingToOuterJointPosY = targetPosY;
 
 	// This function defines a drawings on the canvas
   	function draw() {
@@ -291,6 +310,30 @@ function setup() { "use strict";
 
 		}
 
+		function DrawWings(){
+
+			// left wing inner joint
+			context.save();
+			context.beginPath();
+			context.translate(targetPosX, targetPosY);
+			context.rotate(leftWingToInnerJointRotation * Math.PI / 180);
+			context.fillRect(0, 0, 50, 2);
+			//console.log(canvas.height/2);
+			// SET CONDITION FOR FLAPPING MOTION!!!!
+			
+			
+			
+			context.fillStyle = "brown";
+			context.fill();
+
+			// right wing inner joint
+
+
+			context.restore();
+
+
+		}
+
 		function DrawTarget(){
 			
 			context.save();
@@ -396,6 +439,7 @@ function setup() { "use strict";
 		}
 
 		
+		
 		// Calls all necessary drawing functions
 		context.save();
 		
@@ -411,6 +455,7 @@ function setup() { "use strict";
 		DrawAimAssist();
 		DrawSlingShot();
 		DrawPlatform();
+		DrawWings();
 		DrawTarget();
 		DrawRockAndTargetCollisionDetectionText();
 		
