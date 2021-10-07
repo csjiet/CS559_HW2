@@ -70,27 +70,12 @@ function setup() { "use strict";
 
 	// Left wing stroke variables
 	var innerAndOuterWingFlex = 15;
-
-	var leftWingFromInnerJointPosX = targetPosX;
-	var leftWingFromInnerJointPosY = targetPosY;
-	var leftWingToInnerJointPosX = targetPosX; 
-	var leftWingToInnerJointPosY = targetPosY;
 	var leftWingToInnerJointRotation = 180;
-
-	var leftWingToOuterJointPosX = targetPosX - 10; 
-	var leftWingToOuterJointPosY = targetPosY;
 	var leftWingToOuterJointRotation = leftWingToInnerJointRotation - innerAndOuterWingFlex;
 	
 
 	// Right wing stoke variables
-	var rightWingFromInnerJointPosX = targetPosX;
-	var rightWingFromInnerJointPosY = targetPosY;
-	var rightWingToInnerJointPosX = targetPosX - 10; 
-	var rightWingToInnerJointPosY = targetPosY;
 	var rightWingToInnerJointRotation = 0;
-
-	var rightWingToOuterJointPosX = targetPosX - 10; 
-	var rightWingToOuterJointPosY = targetPosY;
 	var rightWingToOuterJointRotation = rightWingToInnerJointRotation + innerAndOuterWingFlex;
 
 
@@ -249,7 +234,10 @@ function setup() { "use strict";
 			context.restore();	
 		}
 
+		// This function renders the sun or the moon depending on the time
 		function dayNightChanger(){
+
+			// This function draws the sun
 			function DrawSun(radOfSun, scaleX, scaleY, speedOfSun){
 				
 
@@ -278,7 +266,7 @@ function setup() { "use strict";
 				
 			}
 
-			
+			// This function draws the moon
 			function DrawMoon(radOfMoon, scaleX, scaleY, speedOfSun){
 				function moonColorChanger(){
 					
@@ -308,7 +296,7 @@ function setup() { "use strict";
 			}
 			
 			
-			
+			// Checks if sun position has reached the end of the canvas
 			if(sunPosY <= canvas.height){
 				DrawSun(50, 1, 1, 5);
 			}else{
@@ -317,12 +305,15 @@ function setup() { "use strict";
 
 		}
 
+		// This function draws the wings of the target (piggy)
 		function DrawWings(){
 
-			var innerJointSpan = 40;
-			var outerJointSpan = 40;
+			// Wing span size
+			var innerJointSpan = 40; // Wing span of the inner joint
+			var outerJointSpan = 40; // Wing span of the outer joint
 
-			// left wing inner joint
+			// Left wing of target
+			// Left wing inner joint
 			context.save();
 			context.beginPath();
 			context.translate(targetPosX, targetPosY);
@@ -333,6 +324,7 @@ function setup() { "use strict";
 			context.fill();
 			context.restore();
 
+			// Left wing outer joint
 			context.save();
 			context.beginPath();
 			context.translate(targetPosX, targetPosY);
@@ -345,6 +337,7 @@ function setup() { "use strict";
 			context.restore();
 
 
+			// Right wing of target
 			// Right wing inner joint
 			context.save();
 			context.beginPath();
@@ -356,6 +349,7 @@ function setup() { "use strict";
 			context.fill();
 			context.restore();
 
+			// Right wing outer joint
 			context.save();
 			context.beginPath();
 			context.translate(targetPosX, targetPosY);
@@ -366,16 +360,15 @@ function setup() { "use strict";
 			context.fillRect(0, 0, outerJointSpan, 2);
 			context.fill();
 			context.restore();
-			// SET CONDITION FOR FLAPPING MOTION!!!!
 
 
+			// Generates the flapping motion on each wing based on the position of the target
 			if(leftWingToInnerJointRotation >= 180){
 				leftWingToInnerJointRotation = 180;
 			}
 			if(rightWingToInnerJointRotation <= 0){
 				rightWingToInnerJointRotation = 0;
 			}
-
 			if(leftWingToOuterJointRotation >= 180 - innerAndOuterWingFlex){
 				leftWingToOuterJointRotation = 180 - innerAndOuterWingFlex;
 			}
@@ -383,22 +376,16 @@ function setup() { "use strict";
 				rightWingToOuterJointRotation = 0 + innerAndOuterWingFlex;
 			}
 
-
+			// Updates the rotation of the wings to create flapping motion
 			leftWingToInnerJointRotation += ((targetPosY - 150));
 			rightWingToInnerJointRotation -= ((targetPosY - 150));
 			
 			leftWingToOuterJointRotation += ((targetPosY - 150));
 			rightWingToOuterJointRotation -= ((targetPosY - 150));
-			
-			
-			
-
-			// right wing inner joint
-
-
-
+		
 		}
 
+		// This function draws the target (aka. piggy)
 		function DrawTarget(){
 			
 			context.save();
@@ -475,17 +462,15 @@ function setup() { "use strict";
 			context.strokeStyle = "black";
 			context.stroke();
 
-			
-
-			
-
 			context.restore();
 
 			
 		}
 
+		// Draws winning text when collision is detected
 		function DrawRockAndTargetCollisionDetectionText(){
 
+			// Checks if the position of the rock collides with the position of the target
 			if((targetPosX - 30 <= rockPosX && targetPosX + 30 >= rockPosX) && (targetPosY - 30 <= rockPosY && targetPosY + 30 >= rockPosY)){
 				clearInterval(targetAnimatorTracker);
 				clearInterval(updateAnimatorTracker);
@@ -497,8 +482,6 @@ function setup() { "use strict";
 				context.fillText('LEVEL CLEARED! \nScore: 10/10', 10, 90);
 				context.restore();
 
-				
-				console.log(1);
 			}
 
 		}
@@ -509,14 +492,12 @@ function setup() { "use strict";
 		context.save();
 		
 		dayNightChanger();
-
+		// Checks if loading screen text should be drawn
 		if(isReleased == false){
 			DrawLoadingScreen();
 		}
-
 		DrawGrass();
     	DrawSling();	
-    	
 		DrawAimAssist();
 		DrawSlingShot();
 		DrawPlatform();
@@ -530,12 +511,15 @@ function setup() { "use strict";
 	
 	// Animations
 	
+	// This function animates the position of the target
 	function targetAnimator(){
 
+		// Make the target pendulum between the y axis, to create flying motion
 		timeOfTargetPos += 0.05;
 		targetPosY = (targetPosY + Math.sin(timeOfTargetPos));
 		draw();
 
+		// Checks if the rock has reached the ground
 		if(rockPosX >=600 || rockPosX <= -50 || rockPosY >= 279){
 
 			clearInterval(updateAnimatorTracker);
@@ -543,22 +527,19 @@ function setup() { "use strict";
 	}
 
 
+	// This function animates the sun and moon
 	function sunAndMoonAnimator(){
 		// x^2 + y^2 = r^2
 		// x = r*cos(t)
 		// y = r*sin(t)
 		
+		// Updates the position of the sun and moon in a circular motion
 		timeOfSunAndMoon += 0.05;
 		sunPosX = sunPosX + Math.cos(timeOfSunAndMoon) * 10;
 		sunPosY = sunPosY + Math.sin(timeOfSunAndMoon) * 10;
 
 		moonPosX = moonPosX + Math.cos(timeOfSunAndMoon) * (-10);
 		moonPosY = moonPosY + Math.sin(timeOfSunAndMoon) * (-10);
-
-		// if(rockPosX >=600 || rockPosX <= -50 || rockPosY >= 279){
-
-		// 	clearInterval(sunMoonAnimatorTracker);
-		// }
 
 	}
 
@@ -572,11 +553,6 @@ function setup() { "use strict";
 		distanceChanged = distanceChanged * -1;
 		startingGrassX = startingGrassX + distanceChanged;
 		
-		// Stops grass animation when game ends/ rock reaches the ground & end of canvas
-		// if(rockPosX >=600 || rockPosX <= -50 || rockPosY >= 279){
-
-		// 	clearInterval(grassAnimatorTracker);
-		// }
 	}
 
 	// This function calculates distance
